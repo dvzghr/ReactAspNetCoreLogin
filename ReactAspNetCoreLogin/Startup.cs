@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,16 @@ namespace ReactAspNetCoreLogin
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                                            {
+                                                HotModuleReplacement = true,
+                                                ReactHotModuleReplacement = true
+                                            });
             }
+
+            app.UseStaticFiles();
+            app.UseStatusCodePages();
 
             app.UseMvc();
         }
