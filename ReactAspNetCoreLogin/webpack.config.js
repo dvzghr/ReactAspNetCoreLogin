@@ -4,7 +4,8 @@ const bundleOutputDir = './wwwroot/';
 
 module.exports = {
     mode: 'development',
-    entry: { main: './Client/index.js' },
+    devtool: 'false',
+    entry: {main: './Client/index.js'},
     output: {
         path: path.resolve(__dirname, bundleOutputDir),
         publicPath: '/dist/js/',
@@ -12,8 +13,8 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.(js|jsx)$/, use: 'babel-loader', exclude: /node_modules/ },
-            { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+            {test: /\.(js|jsx)$/, use: 'babel-loader', exclude: /node_modules/},
+            {test: /\.css$/, use: ['style-loader', 'css-loader']}
         ]
     },
     plugins: [

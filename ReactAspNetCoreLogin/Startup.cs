@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,12 +71,20 @@ namespace ReactAspNetCoreLogin
                                             });
             }
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseStatusCodePages();
 
             app.UseAuthentication();
 
             app.UseMvc();
+
+            //handle client side routes
+            app.Run( async (context) =>
+            {
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(Path.Combine(env.WebRootPath,"index.html"));
+            });
         }
     }
 }
