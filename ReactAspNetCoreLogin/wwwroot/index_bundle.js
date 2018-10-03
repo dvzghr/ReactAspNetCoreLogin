@@ -64,7 +64,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "da538884ff4a8e759b93";
+/******/ 	var hotCurrentHash = "32e84f65e01868728726";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1275,15 +1275,16 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var uri = '/api';
 
-// axios.interceptors.request.use(response => response,
-//     error => {
-//         const orgReq = error.config;
-//         if (error.response.status === 401 && !orgReq._retry) {
-//             return {data: 'relogin'};
-//         }
-//         return Promise.reject(error);
-//     }
-// );
+_axios2.default.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    var orgReq = error.config;
+    if (error.response.data.token.KEY == 'ERR_EXPIRED_TOKEN') {
+        alert('Session expired!');
+        localStorage.clear();
+    }
+    return Promise.reject(error);
+});
 
 exports.default = {
     login: function login(user) {
@@ -1319,30 +1320,19 @@ exports.default = {
                 while (1) {
                     switch (_context2.prev = _context2.next) {
                         case 0:
-                            response = void 0;
-                            _context2.prev = 1;
-                            _context2.next = 4;
+                            _context2.next = 2;
                             return _axios2.default.get(uri + "/secure", { headers: (0, _authHeader.authHeader)() });
 
-                        case 4:
+                        case 2:
                             response = _context2.sent;
+                            return _context2.abrupt("return", response);
 
-                            console.log(response);
-                            return _context2.abrupt("return", response.data);
-
-                        case 9:
-                            _context2.prev = 9;
-                            _context2.t0 = _context2["catch"](1);
-
-                            console.log(_context2.t0);
-                            return _context2.abrupt("return", _context2.t0.response.status);
-
-                        case 13:
+                        case 4:
                         case "end":
                             return _context2.stop();
                     }
                 }
-            }, _callee2, _this2, [[1, 9]]);
+            }, _callee2, _this2);
         }))();
     }
 };

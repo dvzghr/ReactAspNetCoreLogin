@@ -3,15 +3,16 @@ import {authHeader} from "./auth-header";
 
 const uri = '/api';
 
-// axios.interceptors.request.use(response => response,
-//     error => {
-//         const orgReq = error.config;
-//         if (error.response.status === 401 && !orgReq._retry) {
-//             return {data: 'relogin'};
-//         }
-//         return Promise.reject(error);
-//     }
-// );
+axios.interceptors.response.use(response => response,
+    error => {
+        const orgReq = error.config;
+        if (error.response.data.token.KEY == 'ERR_EXPIRED_TOKEN') {
+            alert('Session expired!');
+            localStorage.clear();
+        }
+        return Promise.reject(error);
+    }
+);
 
 export default {
     async login(user) {
@@ -19,15 +20,18 @@ export default {
         return response.data;
     },
     async getSecureMsg() {
-        let response;
-        try {
-            response = await axios.get(`${uri}/secure`, {headers: authHeader()});
-            console.log(response);
-            return response.data;
-        }
-        catch (error) {
-            console.log(error);
-            return error.response.status;
-        }
+        // let response;
+        // try {
+        //     response = await axios.get(`${uri}/secure`, {headers: authHeader()});
+        //     console.log(response);
+        //     return response.data;
+        // }
+        // catch (error) {
+        //     console.log(error);
+        //     return error.response.status;
+        // }
+
+        const response = await axios.get(`${uri}/secure`, {headers: authHeader()});
+        return response;
     }
 };
