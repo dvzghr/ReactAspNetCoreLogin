@@ -87,11 +87,4 @@ class Login extends React.Component {
     }
 }
 
-// function mapStateToProps(state) {
-//     const {loggingIn} = state.authentication;
-//     return {
-//         loggingIn
-//     };
-// }
-
 export default Login;
