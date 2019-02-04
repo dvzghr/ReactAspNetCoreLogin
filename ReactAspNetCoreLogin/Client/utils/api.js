@@ -5,33 +5,29 @@ const uri = '/api';
 
 axios.interceptors.response.use(response => response,
     error => {
-        const orgReq = error.config;
-        if (error.response.data.token.KEY == 'ERR_EXPIRED_TOKEN') {
-            alert('Session expired!');
+        if (error.response.status === 401) {
             localStorage.clear();
+            //location.reload(true);
+            location.href = '/logout'
         }
-        return Promise.reject(error);
+
+        console.log(error)
+        const msg = (error && error.message);
+        return Promise.reject(msg);
     }
 );
 
-export default {
-    async login(user) {
-        const response = await axios.post(`${uri}/token`, user);
-        return response.data;
-    },
-    async getSecureMsg() {
-        // let response;
-        // try {
-        //     response = await axios.get(`${uri}/secure`, {headers: authHeader()});
-        //     console.log(response);
-        //     return response.data;
-        // }
-        // catch (error) {
-        //     console.log(error);
-        //     return error.response.status;
-        // }
+async function login(user) {
+    const response = await axios.post(`${uri}/token`, user);
+    return response.data;
+}
 
-        const response = await axios.get(`${uri}/secure`, {headers: authHeader()});
-        return response;
-    }
-};
+async function getSecureMsg() {
+    const response = await axios.get(`${uri}/secure`, {headers: authHeader()});
+    return response;
+}
+
+export default {
+    login,
+    getSecureMsg
+}

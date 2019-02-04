@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import api from "../utils/api";
 import {Redirect} from "react-router-dom";
 
-class Login extends React.Component {
+class Login extends Component {
     constructor(props) {
         super(props);
 
@@ -86,12 +86,5 @@ class Login extends React.Component {
         );
     }
 }
-
-// function mapStateToProps(state) {
-//     const {loggingIn} = state.authentication;
-//     return {
-//         loggingIn
-//     };
-// }
 
 export default Login;

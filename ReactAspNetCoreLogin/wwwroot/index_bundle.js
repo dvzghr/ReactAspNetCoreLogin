@@ -64,7 +64,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "32e84f65e01868728726";
+/******/ 	var hotCurrentHash = "c30f9a6f6a34543427b4";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -939,8 +939,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Login = function (_React$Component) {
-    _inherits(Login, _React$Component);
+var Login = function (_Component) {
+    _inherits(Login, _Component);
 
     function Login(props) {
         _classCallCheck(this, Login);
@@ -1072,14 +1072,7 @@ var Login = function (_React$Component) {
     }]);
 
     return Login;
-}(_react2.default.Component);
-
-// function mapStateToProps(state) {
-//     const {loggingIn} = state.authentication;
-//     return {
-//         loggingIn
-//     };
-// }
+}(_react.Component);
 
 exports.default = Login;
 
@@ -1123,7 +1116,6 @@ exports.default = function (_ref) {
                 }
             });
         }
-
     }));
 };
 
@@ -1153,8 +1145,6 @@ var _api = __webpack_require__(/*! ../utils/api */ "./Client/utils/api.js");
 
 var _api2 = _interopRequireDefault(_api);
 
-var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1172,8 +1162,7 @@ var Protected = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Protected.__proto__ || Object.getPrototypeOf(Protected)).call(this, props));
 
         _this.state = {
-            msg: 'none',
-            isLoggedIn: true
+            msg: 'no msg'
         };
         return _this;
     }
@@ -1184,29 +1173,19 @@ var Protected = function (_Component) {
             var _this2 = this;
 
             _api2.default.getSecureMsg().then(function (msg) {
-                if (msg !== 401) {
-                    _this2.setState({
-                        msg: msg,
-                        isLoggedIn: true
-                    });
-                } else {
-                    _this2.setState({ isLoggedIn: false });
-                }
+                _this2.setState({ msg: msg.data });
+            }).catch(function (err) {
+                return console.log(err);
             });
         }
     }, {
         key: "render",
         value: function render() {
-            return this.state.isLoggedIn ? _react2.default.createElement(
+            return _react2.default.createElement(
                 "h1",
                 null,
                 this.state.msg
-            ) : _react2.default.createElement(_reactRouterDom.Redirect, { to: {
-                    pathname: "/logout",
-                    state: { from: this.props.location }
-                } })
-            //<h1>Logged in:{this.state.isLoggedIn.toString()} message:{this.state.msg}</h1>
-            ;
+            );
         }
     }]);
 
@@ -1263,6 +1242,60 @@ var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+var login = function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(user) {
+        var response;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        _context.next = 2;
+                        return _axios2.default.post(uri + "/token", user);
+
+                    case 2:
+                        response = _context.sent;
+                        return _context.abrupt("return", response.data);
+
+                    case 4:
+                    case "end":
+                        return _context.stop();
+                }
+            }
+        }, _callee, this);
+    }));
+
+    return function login(_x) {
+        return _ref.apply(this, arguments);
+    };
+}();
+
+var getSecureMsg = function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+        var response;
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+            while (1) {
+                switch (_context2.prev = _context2.next) {
+                    case 0:
+                        _context2.next = 2;
+                        return _axios2.default.get(uri + "/secure", { headers: (0, _authHeader.authHeader)() });
+
+                    case 2:
+                        response = _context2.sent;
+                        return _context2.abrupt("return", response);
+
+                    case 4:
+                    case "end":
+                        return _context2.stop();
+                }
+            }
+        }, _callee2, this);
+    }));
+
+    return function getSecureMsg() {
+        return _ref2.apply(this, arguments);
+    };
+}();
+
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -1278,63 +1311,20 @@ var uri = '/api';
 _axios2.default.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    var orgReq = error.config;
-    if (error.response.data.token.KEY == 'ERR_EXPIRED_TOKEN') {
-        alert('Session expired!');
+    if (error.response.status === 401) {
         localStorage.clear();
+        //location.reload(true);
+        location.href = '/logout';
     }
-    return Promise.reject(error);
+
+    console.log(error);
+    var msg = error && error.message;
+    return Promise.reject(msg);
 });
 
 exports.default = {
-    login: function login(user) {
-        var _this = this;
-
-        return _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-            var response;
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            _context.next = 2;
-                            return _axios2.default.post(uri + "/token", user);
-
-                        case 2:
-                            response = _context.sent;
-                            return _context.abrupt("return", response.data);
-
-                        case 4:
-                        case "end":
-                            return _context.stop();
-                    }
-                }
-            }, _callee, _this);
-        }))();
-    },
-    getSecureMsg: function getSecureMsg() {
-        var _this2 = this;
-
-        return _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-            var response;
-            return _regenerator2.default.wrap(function _callee2$(_context2) {
-                while (1) {
-                    switch (_context2.prev = _context2.next) {
-                        case 0:
-                            _context2.next = 2;
-                            return _axios2.default.get(uri + "/secure", { headers: (0, _authHeader.authHeader)() });
-
-                        case 2:
-                            response = _context2.sent;
-                            return _context2.abrupt("return", response);
-
-                        case 4:
-                        case "end":
-                            return _context2.stop();
-                    }
-                }
-            }, _callee2, _this2);
-        }))();
-    }
+    login: login,
+    getSecureMsg: getSecureMsg
 };
 
 /***/ }),

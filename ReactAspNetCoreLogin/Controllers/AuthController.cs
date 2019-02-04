@@ -27,7 +27,7 @@ namespace ReactAspNetCoreLogin.Controllers
         public IActionResult Get()
         {
             var user = HttpContext.User.Identity;
-            return Ok($"{user.Name}: secure message");
+            return Ok($"Hello {user.Name}, this is your secure message");
         }
 
         [HttpPost("token")]

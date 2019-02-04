@@ -50,8 +50,8 @@ namespace ReactAspNetCoreLogin
                                                                 IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                                                                 ValidateIssuer = false,
                                                                 ValidateAudience = false,
-                                                                ValidateLifetime = true
-                                                                //ClockSkew = TimeSpan.Zero
+                                                                ValidateLifetime = true,
+                                                                ClockSkew = TimeSpan.Zero
                                                             };
                         options.IncludeErrorDetails = true;
                     });
