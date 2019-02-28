@@ -17,9 +17,9 @@ namespace ReactAspNetCoreLogin.Service
         {
             var claims = new[]
                          {
-                             new Claim(JwtRegisteredClaimNames.Sub, user.Name),
+                             //new Claim(JwtRegisteredClaimNames.Sub, user.Name),
                              new Claim(JwtRegisteredClaimNames.GivenName, user.Name),
-                             new Claim(JwtRegisteredClaimNames.UniqueName, user.Name + user.Id),
+                             new Claim(JwtRegisteredClaimNames.UniqueName, user.Name),
                              new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                              new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                              new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture))

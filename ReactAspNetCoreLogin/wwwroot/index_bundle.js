@@ -64,7 +64,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "c30f9a6f6a34543427b4";
+/******/ 	var hotCurrentHash = "b99072b2eae4e26cf87b";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1164,12 +1164,14 @@ var Protected = function (_Component) {
         _this.state = {
             msg: 'no msg'
         };
+
+        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
 
     _createClass(Protected, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
+        key: "handleClick",
+        value: function handleClick() {
             var _this2 = this;
 
             _api2.default.getSecureMsg().then(function (msg) {
@@ -1182,9 +1184,18 @@ var Protected = function (_Component) {
         key: "render",
         value: function render() {
             return _react2.default.createElement(
-                "h1",
+                _react.Fragment,
                 null,
-                this.state.msg
+                _react2.default.createElement(
+                    "h1",
+                    null,
+                    this.state.msg
+                ),
+                _react2.default.createElement(
+                    "button",
+                    { onClick: this.handleClick },
+                    "Get secure msg"
+                )
             );
         }
     }]);
